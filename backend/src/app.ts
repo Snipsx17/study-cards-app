@@ -1,11 +1,19 @@
-import express from "express";
-const app = express();
-const port = 3000;
+import { Server } from "./presentation/Server";
+import { envs } from "./config/envs.plugin";
+import { errorHandler } from "./middlewares/ErrorHandler";
+import { MainRouter } from "./routes/mainRouter";
 
-app.get("/", (req, res) => {
-  res.send("Hello World!");
-});
+const main = async (): Promise<void> => {
+  const server = new Server(
+    envs.SERVER_PORT,
+    MainRouter,
+    "public",
+    errorHandler,
+  );
 
-app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`);
-});
+  server.start();
+};
+
+(async () => {
+  await main();
+})();
