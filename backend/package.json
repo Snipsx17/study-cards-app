@@ -12,11 +12,16 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.731.1",
+    "@aws-sdk/lib-dynamodb": "^3.731.1",
+    "add": "^2.0.6",
     "dotenv": "^16.4.7",
     "env-var": "^7.5.0",
     "express": "^5.0.1",
     "install": "^0.13.0",
-    "morgan": "^1.10.0"
+    "morgan": "^1.10.0",
+    "uuid": "^11.0.5",
+    "yarn": "^1.22.22"
   },
   "devDependencies": {
     "@types/express": "^5.0.0",
