@@ -1,6 +1,6 @@
 import { ErrorRequestHandler, NextFunction, Request, Response } from "express";
-import { getErrorMessage } from "../utils/getErrorMessage";
-import { envs } from "../config/envs.plugin";
+import { getErrorMessage } from "@/utils/getErrorMessage";
+import { envs } from "@/config/envs.plugin";
 
 interface ErrorResponse {
   message: string;
@@ -23,6 +23,6 @@ export const errorHandler: ErrorRequestHandler = (
   if (envs.ENVIRONMENT !== "PRODUCTION") {
     errorResponse.stack = err.stack;
   }
-
+  console.log(getErrorMessage(err));
   res.json(errorResponse);
 };
