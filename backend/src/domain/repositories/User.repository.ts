@@ -1,6 +1,6 @@
 import { UserEntity } from "../entities/User.entity";
 
-export abstract class UserDatasource {
+export abstract class UserRepository {
   abstract userExists(user: UserEntity): Promise<boolean | undefined>;
   abstract getUserById(id: number): Promise<UserEntity | undefined>;
   abstract getUserByEmail(email: string): Promise<UserEntity | undefined>;
