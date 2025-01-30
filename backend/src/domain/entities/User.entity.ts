@@ -1,10 +1,26 @@
+interface IUserEntity {
+  id?: number;
+  name: string;
+  email: string;
+  username: string;
+  password: string;
+  avatarUrl?: string;
+}
+
 export class UserEntity {
-  constructor(
-    public id: number,
-    public name: string,
-    public email: string,
-    public username: string,
-    public password: string,
-    public avatarUrl?: string,
-  ) {}
+  public id?: number;
+  public name: string;
+  public email: string;
+  public username: string;
+  public password: string;
+  public avatarUrl?: string;
+
+  constructor(user: IUserEntity) {
+    this.id = user.id || 0;
+    this.name = user.name;
+    this.email = user.email;
+    this.username = user.username;
+    this.password = user.password;
+    this.avatarUrl = user.avatarUrl;
+  }
 }
