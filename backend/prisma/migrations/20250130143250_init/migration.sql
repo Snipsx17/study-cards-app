@@ -2,7 +2,8 @@
 CREATE TABLE "User" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
-    "username" TEXT NOT NULL,
+    "email" TEXT NOT NULL DEFAULT '',
+    "username" TEXT NOT NULL DEFAULT '',
     "password" TEXT NOT NULL,
     "avatar_url" TEXT NOT NULL,
 
@@ -28,6 +29,9 @@ CREATE TABLE "Group" (
 
     CONSTRAINT "Group_pkey" PRIMARY KEY ("id")
 );
+
+-- CreateIndex
+CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "User_username_key" ON "User"("username");
