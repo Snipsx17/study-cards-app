@@ -12,4 +12,5 @@ export const envs = {
   POSTGRES_DB: env.get("POSTGRES_DB").required().asString(),
   DATABASE_URL: env.get("DATABASE_URL").required().asString(),
   DEFAULT_AVATAR_IMG: env.get("DEFAULT_AVATAR_IMG").required().asString(),
+  SALT_ROUND: env.get("SALT_ROUND").required().asIntPositive(),
 };
