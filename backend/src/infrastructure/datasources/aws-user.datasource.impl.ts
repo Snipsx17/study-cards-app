@@ -59,7 +59,7 @@ export class UserDatasourceImpl extends UserDatasource {
           avatar_url: user.avatarUrl || envs.DEFAULT_AVATAR_IMG,
         },
       });
-      console.log(newUser);
+
       return newUser;
     } catch (error) {
       if (error instanceof Error) throw new Error(error.message);

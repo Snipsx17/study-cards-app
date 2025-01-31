@@ -5,6 +5,7 @@ import { MainRouter } from "@/presentation/router/main.router";
 
 const main = async (): Promise<void> => {
   const mainRouter = new MainRouter();
+
   const server = new Server(
     envs.SERVER_PORT,
     mainRouter.apiV1,
