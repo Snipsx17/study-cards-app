@@ -17,7 +17,9 @@ export class CreateRequestValidator {
         const userData = schema.safeParse(req.body);
 
         if (userData.error) {
-          const e = userData.error.errors.map((err) => err.message);
+          const e = userData.error.errors.map(
+            (err) => `${err.path} ${err.message}`,
+          );
           throw new Error(String(e));
         }
 
