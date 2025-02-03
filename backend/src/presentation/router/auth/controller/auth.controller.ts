@@ -31,6 +31,7 @@ export class AuthController {
       avatarUrl,
     });
 
+    // check if user is already registered
     try {
       const userExists = await this.userRepository.userExists(user);
       if (userExists) {
@@ -47,14 +48,27 @@ export class AuthController {
         res.status(400);
         throw new Error("User already exists");
       }
+    } catch (error) {
+      await this.logRepository?.saveLog(
+        new LogEntity(
+          logType.AUTH,
+          LogLevel.LOW,
+          `An error occurred while trying to register user`,
+        ),
+      );
+      next(error);
+      return;
+    }
 
+    // create user in the database
+    try {
       const userCreated = await this.userRepository.createUser(user);
 
       if (!userCreated) {
         await this.logRepository?.saveLog(
           new LogEntity(
             logType.AUTH,
-            LogLevel.LOW,
+            LogLevel.HIGH,
             `User Registration failed, due DB error: ${JSON.stringify(
               userData,
             )}`,
@@ -74,6 +88,13 @@ export class AuthController {
       res.status(201).json({ message: "User created successfully" });
     } catch (error) {
       if (error instanceof Error) {
+        await this.logRepository?.saveLog(
+          new LogEntity(
+            logType.AUTH,
+            LogLevel.LOW,
+            `An error occurred while trying to register user`,
+          ),
+        );
         next(error);
       }
     }
