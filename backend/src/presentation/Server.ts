@@ -5,6 +5,7 @@ import express, {
   Router,
   urlencoded,
 } from "express";
+import cors from "cors";
 import { morganLogger } from "../config/morgan.plugin";
 
 export class Server {
@@ -23,6 +24,11 @@ export class Server {
     this.app.use(json());
     this.app.use(urlencoded({ extended: true }));
     this.app.use(morganLogger("dev"));
+    this.app.use(
+      cors({
+        origin: "*",
+      }),
+    );
 
     //public folder
     this.app.use(express.static(this.publicFolder));
