@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Button } from "../ui/button";
 import {
   NavigationMenu,
@@ -19,9 +20,11 @@ export const DesktopMenu = () => {
             </Button>
           </NavigationMenuItem>
           <NavigationMenuItem>
-            <Button className=" bg-white text-purple font-bold hover:bg-white">
-              Register
-            </Button>
+            <Link href="/auth/registration">
+              <Button className=" bg-white text-purple font-bold hover:bg-white">
+                Register
+              </Button>
+            </Link>
           </NavigationMenuItem>
           <NavigationMenuItem>
             <Button className=" bg-red text-white font-bold hover:bg-red">
