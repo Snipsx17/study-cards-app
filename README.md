@@ -18,6 +18,14 @@ Go to the project directory
   cd study-cards-app
 ```
 
+Install dependencies
+
+```bash
+  pnpm install
+```
+
+_This will install dependencies to entire project_
+
 Go to backend folder and create .env file
 
 ```bash
@@ -53,7 +61,9 @@ Go to frontend folder and create .env file
 
 create the next variables
 
-- NEXT_PUBLIC_API_BASE_URL = api url
+- NEXT_PUBLIC_API_BASE_URL = api url by default http://localhost:${PORT}/api/
+
+_**PORT** was defined on backend as **SERVER_PORT**_
 
 Go to the main project directory
 
@@ -61,26 +71,9 @@ Go to the main project directory
   cd ../
 ```
 
-Install dependencies
-
-```bash
-  pnpm install
-```
-
-_This will install dependencies to entire project_
-
 Start the servers
 
 ```bash
   pnpm run frontend:dev
   pnpm run backend:dev
-```
-
-## Installation
-
-Install my-project with npm
-
-```bash
-  npm install my-project
-  cd my-project
 ```
