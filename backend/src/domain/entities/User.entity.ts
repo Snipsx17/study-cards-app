@@ -1,3 +1,5 @@
+import { envs } from "@/config/envs.plugin";
+
 interface IUserEntity {
   id?: number;
   name: string;
@@ -13,7 +15,7 @@ export class UserEntity {
   public email: string;
   public username: string;
   public password: string;
-  public avatarUrl?: string;
+  public avatarUrl? = envs.DEFAULT_AVATAR_IMG;
 
   constructor(user: IUserEntity) {
     this.id = user.id || 0;
