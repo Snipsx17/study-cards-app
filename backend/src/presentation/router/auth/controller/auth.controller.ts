@@ -1,4 +1,5 @@
 import { Password } from "@/config/bcrypt.plugin";
+import { envs } from "@/config/envs.plugin";
 import { LogEntity, LogLevel, logType } from "@/domain/entities/Log.entity";
 import { UserEntity } from "@/domain/entities/User.entity";
 import { LogRepository } from "@/domain/repositories/Log.repository";
@@ -20,7 +21,7 @@ export class AuthController {
     next: NextFunction,
   ): Promise<void> {
     const { userData } = req;
-    const { name, email, username, password, avatarUrl } = userData!;
+    const { name, email, username, password } = userData!;
     const passwordHashed = await Password.hash(password!);
 
     const user = new UserEntity({
@@ -28,7 +29,6 @@ export class AuthController {
       email,
       username,
       password: passwordHashed,
-      avatarUrl,
     });
 
     // check if user is already registered

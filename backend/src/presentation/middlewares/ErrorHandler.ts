@@ -23,6 +23,6 @@ export const errorHandler: ErrorRequestHandler = (
   if (envs.ENVIRONMENT !== "PRODUCTION") {
     errorResponse.stack = err.stack;
   }
-  console.log(getErrorMessage(err));
+
   res.json(errorResponse);
 };
