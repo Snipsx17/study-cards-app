@@ -1,7 +1,5 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import {
@@ -15,30 +13,35 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
-import { ChevronLeft } from "lucide-react";
+import { ChevronLeft, Loader2 } from "lucide-react";
 import { RegistrationSchema } from "@/domain/schemas/registration.schema";
-import { apiClient } from "@/service/api.client";
+import { apiService } from "@/service/api.service";
+import { useCreateForm } from "@/lib/createForm";
+import { toast } from "@/hooks/use-toast";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function RegistrationPage() {
-  const form = useForm<z.infer<typeof RegistrationSchema>>({
-    resolver: zodResolver(RegistrationSchema),
-    defaultValues: {
-      name: "",
-      email: "",
-      username: "",
-      password: "",
-      confirmPassword: "",
-    },
-  });
+  const [fetching, setFetching] = useState<boolean>(false);
+  const form = useCreateForm();
+  const router = useRouter();
 
   async function onSubmit(values: z.infer<typeof RegistrationSchema>) {
     try {
-      const user = await apiClient.registerUser(values);
-      console.log(user);
+      setFetching(true);
+      const response = await apiService.registerUser(values);
+      toast({
+        title: "Registration Successful",
+        description: `${response}`,
+        variant: "default",
+        duration: 3000,
+      });
+      setFetching(false);
+      setTimeout(() => {
+        router.push("/auth/login");
+      }, 2000);
     } catch (error) {
-      if (error instanceof Error) {
-        console.error();
-      }
+      setFetching(false);
     }
   }
 
@@ -130,7 +133,8 @@ export default function RegistrationPage() {
             />
           </div>
 
-          <Button type="submit" className="w-full">
+          <Button type="submit" className="w-full" disabled={!!fetching}>
+            {fetching && <Loader2 className="animate-spin" />}
             Register
           </Button>
         </form>
