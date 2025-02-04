@@ -35,16 +35,6 @@ export class AuthController {
     try {
       const userExists = await this.userRepository.userExists(user);
       if (userExists) {
-        await this.logRepository?.saveLog(
-          new LogEntity(
-            logType.AUTH,
-            LogLevel.LOW,
-            `User Registration failed, User already exists: ${JSON.stringify(
-              userData,
-            )}`,
-          ),
-        );
-
         res.status(400);
         throw new Error("User already exists");
       }
@@ -53,7 +43,7 @@ export class AuthController {
         new LogEntity(
           logType.AUTH,
           LogLevel.LOW,
-          `An error occurred while trying to register user`,
+          `An error occurred while trying to register user: ${error}`,
         ),
       );
       next(error);
@@ -65,15 +55,6 @@ export class AuthController {
       const userCreated = await this.userRepository.createUser(user);
 
       if (!userCreated) {
-        await this.logRepository?.saveLog(
-          new LogEntity(
-            logType.AUTH,
-            LogLevel.HIGH,
-            `User Registration failed, due DB error: ${JSON.stringify(
-              userData,
-            )}`,
-          ),
-        );
         res.status(500);
         throw new Error("Failed to create user");
       }
@@ -92,7 +73,7 @@ export class AuthController {
           new LogEntity(
             logType.AUTH,
             LogLevel.LOW,
-            `An error occurred while trying to register user`,
+            `An error occurred while trying to register user: ${error}`,
           ),
         );
         next(error);
