@@ -61,7 +61,7 @@ Go to frontend folder and create .env file
 
 create the next variables
 
-- NEXT_PUBLIC_API_BASE_URL = api url by default http://localhost:${PORT}/api/
+- NEXT_PUBLIC_API_BASE_URL = api url by default http://localhost:${PORT}/api/v1/
 
 _**PORT** was defined on backend as **SERVER_PORT**_
 
