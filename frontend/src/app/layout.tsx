@@ -1,5 +1,6 @@
 import { Roboto } from "next/font/google";
 import "./globals.css";
+import { Toaster } from "@/components/ui/toaster";
 
 const roboto = Roboto({
   subsets: ["latin"],
@@ -15,6 +16,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${roboto.className} antialiased bg-purple/5`}>
         {children}
+        <Toaster />
       </body>
     </html>
   );
