@@ -12,15 +12,17 @@ export const DesktopMenu = () => {
       <NavigationMenu>
         <NavigationMenuList className="flex gap-4">
           <NavigationMenuItem>
-            <Button
-              variant="default"
-              className="bg-white text-purple font-bold hover:bg-white"
-            >
-              Login
-            </Button>
+            <Link href="/login">
+              <Button
+                variant="default"
+                className="bg-white text-purple font-bold hover:bg-white"
+              >
+                Login
+              </Button>
+            </Link>
           </NavigationMenuItem>
           <NavigationMenuItem>
-            <Link href="/auth/registration">
+            <Link href="/registration">
               <Button className=" bg-white text-purple font-bold hover:bg-white">
                 Register
               </Button>

@@ -28,10 +28,10 @@ export const MobileMenu = () => {
             <SheetTitle>Menu</SheetTitle>
           </SheetHeader>
           <div className="flex flex-col space-y-4 items-center mt-4">
-            <Link href="/" className="text-lg">
+            <Link href="/login" className="text-lg">
               Login
             </Link>
-            <Link href="/about" className="text-lg">
+            <Link href="/registration" className="text-lg">
               Register
             </Link>
             <Link href="/contact" className="text-lg font">
