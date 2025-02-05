@@ -90,7 +90,7 @@ export class AuthController {
     try {
       const user = await this.userRepository.getUserByUsername(username);
       if (!user) {
-        res.status(404);
+        res.status(401);
         throw new Error("Invalid credentials");
       }
 
