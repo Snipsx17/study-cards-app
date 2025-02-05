@@ -39,6 +39,8 @@ create the next variables
 - SERVER_PORT = server port
 - DEFAULT_AVATAR_IMG = url
 - SALT_ROUND = number of salt rounds for password encryption
+- JWT_SECRET = secret
+- JWT_REFRESH_TOKEN_EXPIRATION = expiration time e.g 15d
 - AWS_ACCESS_KEY_ID = aws key
 - AWS_SECRET_ACCESS_KEY = aws secret
 - AWS_REGION = default region
