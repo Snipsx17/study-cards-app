@@ -1,4 +1,4 @@
-import { UserSchema } from "@/domain/schemas/user.schema";
+import { LoginUserSchema, UserSchema } from "@/domain/schemas/user.schema";
 import { CreateRequestValidator } from "@/presentation/middlewares/request-validator.middleware";
 import { Router } from "express";
 import { AuthController } from "../controller/auth.controller";
@@ -21,6 +21,12 @@ export class authRouter {
       "/user-register",
       requestValidator.validate(UserSchema),
       authController.registerUser,
+    );
+
+    this.router.post(
+      "/login",
+      requestValidator.validate(LoginUserSchema),
+      authController.loginUser,
     );
 
     return this.router;

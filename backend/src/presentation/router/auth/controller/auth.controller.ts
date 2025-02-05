@@ -1,5 +1,6 @@
 import { Password } from "@/config/bcrypt.plugin";
 import { envs } from "@/config/envs.plugin";
+import { tokenJwt } from "@/config/jwt.plugin";
 import { LogEntity, LogLevel, logType } from "@/domain/entities/Log.entity";
 import { UserEntity } from "@/domain/entities/User.entity";
 import { LogRepository } from "@/domain/repositories/Log.repository";
@@ -13,6 +14,7 @@ export class AuthController {
     private readonly logRepository?: LogRepository,
   ) {
     this.registerUser = this.registerUser.bind(this);
+    this.loginUser = this.loginUser.bind(this);
   }
 
   async registerUser(
@@ -78,6 +80,45 @@ export class AuthController {
         );
         next(error);
       }
+    }
+  }
+
+  async loginUser(req: RequestWithUserData, res: Response, next: NextFunction) {
+    const { userData } = req;
+    const { username, password } = userData!;
+
+    try {
+      const user = await this.userRepository.getUserByUsername(username);
+      if (!user) {
+        res.status(404);
+        throw new Error("User not found");
+      }
+
+      const passwordMatch = await Password.validate(password!, user.password);
+      if (!passwordMatch) {
+        res.status(401);
+        throw new Error("Invalid credentials");
+      }
+
+      const refreshToken = tokenJwt.createRefreshToken({
+        userId: user.id,
+        user: user.username,
+        email: user.email,
+      });
+
+      // set cookie
+      res.cookie("refreshToken", refreshToken, {
+        expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 15), //15d
+        httpOnly: true,
+        secure: envs.ENVIRONMENT === "production",
+      });
+
+      res.status(200).json({ message: "User logged in successfully" });
+    } catch (error) {
+      await this.logRepository?.saveLog(
+        new LogEntity(logType.AUTH, LogLevel.HIGH, `Fail login: ${error}`),
+      );
+      next(error);
     }
   }
 }
