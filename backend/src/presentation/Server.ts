@@ -26,7 +26,8 @@ export class Server {
     this.app.use(morganLogger("dev"));
     this.app.use(
       cors({
-        origin: "*",
+        origin: "http://localhost:3000", // Permitir el dominio de tu frontend
+        credentials: true,
       }),
     );
 

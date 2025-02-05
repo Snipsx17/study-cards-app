@@ -15,4 +15,5 @@ export const envs = {
     .get("JWT_REFRESH_TOKEN_EXPIRATION")
     .required()
     .asString(),
+  CORS_ORIGIN: env.get("CORS_ORIGIN").required().asString(),
 };
