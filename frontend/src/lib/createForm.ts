@@ -1,17 +1,10 @@
-import { RegistrationSchema } from "@/domain/schemas/registration.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
+import { z, ZodSchema } from "zod";
 
-export const useCreateForm = () => {
-  return useForm<z.infer<typeof RegistrationSchema>>({
-    resolver: zodResolver(RegistrationSchema),
-    defaultValues: {
-      name: "",
-      email: "",
-      username: "",
-      password: "",
-      confirmPassword: "",
-    },
+export const useCreateForm = (schema: ZodSchema, defaultValues: object) => {
+  return useForm<z.infer<typeof schema>>({
+    resolver: zodResolver(schema),
+    defaultValues,
   });
 };
