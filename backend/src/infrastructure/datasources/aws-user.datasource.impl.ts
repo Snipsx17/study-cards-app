@@ -27,6 +27,7 @@ export class UserDatasourceImpl extends UserDatasource {
   getUserById(id: number): Promise<UserEntity | undefined> {
     throw new Error("Method not implemented.");
   }
+
   async getUserByUsername(username: string): Promise<UserEntity | undefined> {
     try {
       const user = await prisma.user.findFirst({
@@ -43,10 +44,6 @@ export class UserDatasourceImpl extends UserDatasource {
     } catch (error) {
       if (error instanceof Error) throw new Error(error.message);
     }
-  }
-
-  getUserByEmail(email: string): Promise<UserEntity | undefined> {
-    throw new Error("Method not implemented.");
   }
   async createUser(user: UserEntity): Promise<UserEntity | undefined> {
     try {
