@@ -23,7 +23,13 @@ import { useRouter } from "next/navigation";
 
 export default function RegistrationPage() {
   const [fetching, setFetching] = useState<boolean>(false);
-  const form = useCreateForm();
+  const form = useCreateForm(RegistrationSchema, {
+    name: "",
+    email: "",
+    username: "",
+    password: "",
+    confirmPassword: "",
+  });
   const router = useRouter();
 
   async function onSubmit(values: z.infer<typeof RegistrationSchema>) {
@@ -37,9 +43,8 @@ export default function RegistrationPage() {
         duration: 3000,
       });
       setFetching(false);
-      setTimeout(() => {
-        router.push("/auth/login");
-      }, 2000);
+
+      router.push("/login");
     } catch (error) {
       setFetching(false);
     }
