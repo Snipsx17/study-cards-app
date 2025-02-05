@@ -55,7 +55,7 @@ export default function LoginPage() {
         <ChevronLeft /> Back to Home
       </Link>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 mt-4">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 my-4">
           <div className="mb-6">
             {/* username */}
             <FormField
@@ -97,6 +97,14 @@ export default function LoginPage() {
           </Button>
         </form>
       </Form>
+      <span>
+        <p>
+          Don&apos;t have an account? &nbsp;
+          <Link href="/registration" className="text-blue-500">
+            Create an account
+          </Link>
+        </p>
+      </span>
     </>
   );
 }

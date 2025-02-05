@@ -57,7 +57,7 @@ export default function RegistrationPage() {
         <ChevronLeft /> Back to Home
       </Link>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 mt-4">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 my-4">
           <div className="mb-6">
             {/* name */}
             <FormField
@@ -144,6 +144,14 @@ export default function RegistrationPage() {
           </Button>
         </form>
       </Form>
+      <span>
+        <p>
+          Already have an account &nbsp;
+          <Link href="/login" className="text-blue-500">
+            Login
+          </Link>
+        </p>
+      </span>
     </>
   );
 }
