@@ -1,4 +1,7 @@
-import { RegistrationSchema } from "@/domain/schemas/registration.schema";
+import {
+  LoginSchema,
+  RegistrationSchema,
+} from "@/domain/schemas/registration.schema";
 import { AxiosInstance } from "axios";
 import { z } from "zod";
 import { axiosClient } from "./axios.client";
@@ -25,6 +28,14 @@ class ApiService {
 
   async registerUser(user: z.infer<typeof RegistrationSchema>) {
     return await this.service.post("auth/user-register", user, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+  }
+
+  async loginUser(user: z.infer<typeof LoginSchema>) {
+    return await this.service.post("auth/login", user, {
       headers: {
         "Content-Type": "application/json",
       },
