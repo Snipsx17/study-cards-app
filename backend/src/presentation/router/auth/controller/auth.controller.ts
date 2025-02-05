@@ -91,10 +91,11 @@ export class AuthController {
       const user = await this.userRepository.getUserByUsername(username);
       if (!user) {
         res.status(404);
-        throw new Error("User not found");
+        throw new Error("Invalid credentials");
       }
 
       const passwordMatch = await Password.validate(password!, user.password);
+
       if (!passwordMatch) {
         res.status(401);
         throw new Error("Invalid credentials");
