@@ -32,7 +32,6 @@ export const useGlobalStore = create<GlobalStoreI>((set) => ({
   groups: [],
   login: (user) => {
     set({ user, isLoggedIn: true });
-    console.log(user);
   },
   logout: () => set({ user: null, isLoggedIn: false }),
   setCards: (cards) => set({ cards }),
