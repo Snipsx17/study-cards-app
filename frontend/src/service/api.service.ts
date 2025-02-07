@@ -10,7 +10,7 @@ import { toast } from "@/hooks/use-toast";
 class ApiService {
   constructor(private readonly service: AxiosInstance) {
     this.service.interceptors.response.use(
-      (response) => response.data.message,
+      (response) => response,
       (error) => {
         const message =
           error.response?.data?.message || "An unexpected error occurred.";
