@@ -20,6 +20,7 @@ import { useCreateForm } from "@/lib/createForm";
 import { toast } from "@/hooks/use-toast";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useGlobalStore } from "@/store/global-store";
 
 export default function LoginPage() {
   const [fetching, setFetching] = useState<boolean>(false);
@@ -27,21 +28,30 @@ export default function LoginPage() {
     username: "",
     password: "",
   });
+
   const router = useRouter();
+  const { login } = useGlobalStore();
 
   async function onSubmit(values: z.infer<typeof LoginSchema>) {
     try {
       setFetching(true);
       const response = await apiService.loginUser(values);
+      const { message, user } = response.data;
       toast({
         title: "Login Successful",
-        description: `${response}`,
+        description: `${message}`,
         variant: "default",
         duration: 3000,
       });
 
-      setFetching(false);
+      const session = {
+        isLogged: true,
+        mode: "remote",
+        user,
+      };
+      localStorage.setItem("session", JSON.stringify(session));
 
+      login(user);
       router.push("/");
     } catch (error) {
       setFetching(false);

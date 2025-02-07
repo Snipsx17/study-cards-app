@@ -1,11 +1,5 @@
-import type { Metadata } from "next";
-
+"use client";
 import { Navbar } from "@/components/navbar/NavBar";
-
-export const metadata: Metadata = {
-  title: "Study Cards App",
-  description: "Application for create flash cards.",
-};
 
 export default function MainLayout({
   children,
