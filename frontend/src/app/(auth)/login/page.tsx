@@ -95,6 +95,11 @@ export default function LoginPage() {
                   <FormControl>
                     <Input type="password" {...field} />
                   </FormControl>
+                  <FormDescription>
+                    <Link href="/forgot-password" className="text-blue-500">
+                      Forgot password?
+                    </Link>
+                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
