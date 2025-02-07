@@ -40,7 +40,7 @@ export class UserDatasourceImpl extends UserDatasource {
         return undefined;
       }
 
-      return new UserEntity(new UserEntity(user));
+      return new UserEntity(user);
     } catch (error) {
       if (error instanceof Error) throw new Error(error.message);
     }

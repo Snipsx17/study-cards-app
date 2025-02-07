@@ -6,7 +6,7 @@ interface IUserEntity {
   email: string;
   username: string;
   password: string;
-  avatarUrl?: string;
+  avatar_url?: string;
 }
 
 export class UserEntity {
@@ -23,6 +23,6 @@ export class UserEntity {
     this.email = user.email;
     this.username = user.username;
     this.password = user.password;
-    this.avatarUrl = user.avatarUrl;
+    this.avatarUrl = user.avatar_url;
   }
 }
