@@ -114,7 +114,16 @@ export class AuthController {
         secure: envs.ENVIRONMENT === "production",
       });
 
-      res.status(200).json({ message: "User logged in successfully" });
+      res.status(200).json({
+        message: "Login successful",
+        user: {
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          username: user.username,
+          avatar: user.avatarUrl,
+        },
+      });
     } catch (error) {
       await this.logRepository?.saveLog(
         new LogEntity(logType.AUTH, LogLevel.HIGH, `Fail login: ${error}`),
