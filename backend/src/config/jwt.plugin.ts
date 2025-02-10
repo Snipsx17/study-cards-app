@@ -17,7 +17,7 @@ export class tokenJwt {
   //   };
 
   static createRefreshToken = (data: any): string => {
-    const refreshTokenSecret = envs.JWT_SECRET;
+    const refreshTokenSecret = envs.JWT_REFRESH_TOKEN_SECRET;
     const tokenExpiration = envs.JWT_REFRESH_TOKEN_EXPIRATION || "15d";
     const token = jwt.sign(
       {
@@ -29,14 +29,12 @@ export class tokenJwt {
     return token;
   };
 
-  validateToken = (token: string) => {
-    const secret = process.env.JWT_TOKEN_SECRET || "secret";
+  static validateToken = (token: string) => {
+    const secret = envs.JWT_REFRESH_TOKEN_SECRET || "secret";
     try {
       const { data } = jwt.verify(token, secret) as JwtPayload;
 
-      const userID: string = data._id;
-
-      return userID;
+      return data;
     } catch (error) {
       throw new Error("Invalid Token");
     }

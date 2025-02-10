@@ -29,6 +29,8 @@ export class authRouter {
       authController.loginUser,
     );
 
+    this.router.get("/logout", authController.logoutUser);
+
     return this.router;
   }
 }

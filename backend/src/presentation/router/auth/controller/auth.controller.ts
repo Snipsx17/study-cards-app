@@ -131,4 +131,27 @@ export class AuthController {
       next(error);
     }
   }
+
+  async logoutUser(
+    req: RequestWithUserData,
+    res: Response,
+    next: NextFunction,
+  ) {
+    const refreshToken = req.cookies["refreshToken"];
+    if (!refreshToken) {
+      res.status(401);
+      throw new Error("Invalid credentials");
+    }
+
+    try {
+      const { user } = tokenJwt.validateToken(refreshToken);
+      res.clearCookie("refreshToken");
+      res.status(200).json({ message: "Logout successful" });
+    } catch (error) {
+      await this.logRepository?.saveLog(
+        new LogEntity(logType.AUTH, LogLevel.LOW, `Fail user logout: ${error}`),
+      );
+      next(error);
+    }
+  }
 }
