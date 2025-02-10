@@ -15,6 +15,7 @@ interface cardI {
 }
 
 interface GlobalStoreI {
+  initialized: boolean;
   isLoggedIn: boolean;
   user: null | userI;
   cards: cardI[];
@@ -26,14 +27,13 @@ interface GlobalStoreI {
 }
 
 export const useGlobalStore = create<GlobalStoreI>((set) => ({
+  initialized: false,
   isLoggedIn: false,
   user: null,
   cards: [],
   groups: [],
-  login: (user) => {
-    set({ user, isLoggedIn: true });
-  },
-  logout: () => set({ user: null, isLoggedIn: false }),
+  login: (user) => set({ isLoggedIn: true, user, initialized: true }),
+  logout: () => set({ isLoggedIn: false, user: null, initialized: true }),
   setCards: (cards) => set({ cards }),
   setGroups: (groups) => set({ groups }),
 }));
