@@ -7,6 +7,7 @@ import express, {
 } from "express";
 import cors from "cors";
 import { morganLogger } from "../config/morgan.plugin";
+import cookieParser from "cookie-parser";
 
 export class Server {
   private app = express();
@@ -23,6 +24,7 @@ export class Server {
     //middleware
     this.app.use(json());
     this.app.use(urlencoded({ extended: true }));
+    this.app.use(cookieParser());
     this.app.use(morganLogger("dev"));
     this.app.use(
       cors({
