@@ -7,7 +7,6 @@ export function UserAvatar({
   avatarUrl?: string;
   username?: string;
 }) {
-  console.log({ avatarUrl });
   return (
     <nav className="md:mx-4">
       <Avatar>
