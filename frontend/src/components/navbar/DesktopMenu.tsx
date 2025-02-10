@@ -6,50 +6,43 @@ import {
   NavigationMenuList,
 } from "../ui/navigation-menu";
 import { useGlobalStore } from "@/store/global-store";
-import { UserAvatar } from "./UserAvatar";
 
-const MenuButtons = () => (
+const NavBar = () => (
   <>
-    <NavigationMenuItem>
-      <Link href="/login">
-        <Button
-          variant="default"
-          className="bg-white text-purple font-bold hover:bg-white"
-        >
-          Login
-        </Button>
-      </Link>
-    </NavigationMenuItem>
+    <nav className="hidden md:block">
+      <NavigationMenu>
+        <NavigationMenuList className="flex gap-4">
+          <NavigationMenuItem>
+            <Link href="/login">
+              <Button
+                variant="default"
+                className="bg-white text-purple font-bold hover:bg-white"
+              >
+                Login
+              </Button>
+            </Link>
+          </NavigationMenuItem>
 
-    <NavigationMenuItem>
-      <Link href="/registration">
-        <Button className=" bg-white text-purple font-bold hover:bg-white">
-          Register
-        </Button>
-      </Link>
-    </NavigationMenuItem>
+          <NavigationMenuItem>
+            <Link href="/registration">
+              <Button className=" bg-white text-purple font-bold hover:bg-white">
+                Register
+              </Button>
+            </Link>
+          </NavigationMenuItem>
 
-    <NavigationMenuItem>
-      <Button className=" bg-red text-white font-bold hover:bg-red">
-        Try app
-      </Button>
-    </NavigationMenuItem>
+          <NavigationMenuItem>
+            <Button className=" bg-red text-white font-bold hover:bg-red">
+              Try app
+            </Button>
+          </NavigationMenuItem>
+        </NavigationMenuList>
+      </NavigationMenu>
+    </nav>
   </>
 );
 
 export const DesktopMenu = () => {
-  const { isLoggedIn, user } = useGlobalStore();
-  return (
-    <nav className="hidden md:block">
-      <NavigationMenu>
-        <NavigationMenuList className="flex gap-4">
-          {!isLoggedIn ? (
-            <MenuButtons />
-          ) : (
-            <UserAvatar avatarUrl={user?.avatar} username={user?.name} />
-          )}
-        </NavigationMenuList>
-      </NavigationMenu>
-    </nav>
-  );
+  const { isLoggedIn } = useGlobalStore();
+  return !isLoggedIn && <NavBar />;
 };

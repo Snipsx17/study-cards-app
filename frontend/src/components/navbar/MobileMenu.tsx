@@ -10,6 +10,7 @@ import {
 import Link from "next/link";
 import { useGlobalStore } from "@/store/global-store";
 import { UserAvatar } from "./UserAvatar";
+import { useRouter } from "next/navigation";
 
 const MenuButtons = () => (
   <>
@@ -25,16 +26,35 @@ const MenuButtons = () => (
   </>
 );
 
+const UserLoggedOptions = () => {
+  const { logout } = useGlobalStore();
+  const router = useRouter();
+
+  const onLogout = () => {
+    localStorage.removeItem("session");
+    logout();
+    router.push("/");
+  };
+
+  return (
+    <>
+      <Button className="text-lg" onClick={onLogout} variant={"link"}>
+        Logout
+      </Button>
+    </>
+  );
+};
+
 export const MobileMenu = () => {
   const { isLoggedIn, user } = useGlobalStore();
   return (
-    <nav className="block md:hidden">
+    <nav>
       <Sheet>
         <SheetTrigger asChild>
           <Button
             variant="link"
             size="lg"
-            className="md:hidden [&_svg]:size-8 text-white"
+            className="[&_svg]:size-8 text-white"
           >
             {!isLoggedIn ? (
               <Menu className="h-4 w-4" />
@@ -46,10 +66,10 @@ export const MobileMenu = () => {
 
         <SheetContent>
           <SheetHeader>
-            <SheetTitle>Menu</SheetTitle>
+            <SheetTitle className="md:text-center">Menu</SheetTitle>
           </SheetHeader>
           <div className="flex flex-col space-y-4 items-center mt-4">
-            {!isLoggedIn ? <MenuButtons /> : <></>}
+            {isLoggedIn ? <UserLoggedOptions /> : <MenuButtons />}
           </div>
         </SheetContent>
       </Sheet>
