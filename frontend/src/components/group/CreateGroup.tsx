@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Plus } from "lucide-react";
+import { Loader2, Plus } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import {
@@ -43,8 +43,14 @@ export function CreateGroup() {
 
   async function onSubmit({ groupName }: CreateFormDataType) {
     try {
+      setFetching(true);
       await apiService.createGroup(groupName);
-    } catch (error) {}
+      setFetching(false);
+      form.reset();
+    } catch (error) {
+    } finally {
+      setFetching(false);
+    }
   }
   return (
     <Dialog>
@@ -82,7 +88,9 @@ export function CreateGroup() {
                 <Button
                   type="submit"
                   className="w-full bg-purple hover:bg-purple/80"
+                  disabled={fetching}
                 >
+                  {fetching && <Loader2 className="animate-spin" />}
                   Submit
                 </Button>
               </DialogFooter>
