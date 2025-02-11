@@ -7,9 +7,11 @@ export default function MainLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <div className="min-h-screen bg-purple-50">
+    <div className="relative min-h-screen bg-purple-50">
       <Navbar />
-      <main>{children}</main>
+      <main className="relative flex items-center justify-center h-screen">
+        {children}
+      </main>
     </div>
   );
 }

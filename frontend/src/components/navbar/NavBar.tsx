@@ -9,7 +9,7 @@ import { Loader2 } from "lucide-react";
 export const Navbar = () => {
   const { initialized } = useGlobalStore();
   return (
-    <header className="bg-purple py-3 px-4 border-0 flex items-center justify-between gap-6">
+    <header className="absolute z-50 top-0 left-0 right-0 bg-purple py-3 px-4 border-0 flex items-center justify-between gap-6">
       <Logo />
       {initialized ? (
         <>
