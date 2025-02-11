@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+"use client";
+
 import { Menu } from "lucide-react";
 import { Button } from "../ui/button";
 import {
@@ -11,6 +14,8 @@ import Link from "next/link";
 import { useGlobalStore } from "@/store/global-store";
 import { UserAvatar } from "./UserAvatar";
 import { useRouter } from "next/navigation";
+import { apiService } from "@/service/api.service";
+import { toast } from "@/hooks/use-toast";
 
 const MenuButtons = () => (
   <>
@@ -30,10 +35,18 @@ const UserLoggedOptions = () => {
   const { logout } = useGlobalStore();
   const router = useRouter();
 
-  const onLogout = () => {
-    localStorage.removeItem("session");
-    logout();
-    router.push("/");
+  const onLogout = async () => {
+    try {
+      apiService.logoutUser();
+      localStorage.removeItem("session");
+      logout();
+      toast({
+        title: "Logout Successful 👋",
+        variant: "default",
+        duration: 3000,
+      });
+      router.push("/");
+    } catch (error) {}
   };
 
   return (
@@ -48,7 +61,7 @@ const UserLoggedOptions = () => {
 export const MobileMenu = () => {
   const { isLoggedIn, user } = useGlobalStore();
   return (
-    <nav>
+    <nav className={`${!isLoggedIn ? "md:hidden" : ""}`}>
       <Sheet>
         <SheetTrigger asChild>
           <Button

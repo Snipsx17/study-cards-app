@@ -41,6 +41,10 @@ class ApiService {
       },
     });
   }
+
+  async logoutUser() {
+    return await this.service.get("auth/logout");
+  }
 }
 
 export const apiService = new ApiService(axiosClient);
