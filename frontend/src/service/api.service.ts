@@ -45,6 +45,10 @@ class ApiService {
   async logoutUser() {
     return await this.service.get("auth/logout");
   }
+
+  async createGroup(groupName: string) {
+    console.log({ groupName });
+  }
 }
 
 export const apiService = new ApiService(axiosClient);
