@@ -1,4 +1,4 @@
-import { LoginUserSchema, UserSchema } from "@/domain/schemas/user.schema";
+import { GroupSchema, LoginUserSchema, UserSchema } from "@/domain/schemas";
 import { CreateRequestValidator } from "@/presentation/middlewares/request-validator.middleware";
 import { Router } from "express";
 import { AuthController } from "../controller/auth.controller";
@@ -7,7 +7,7 @@ import { UserRepositoryImpl } from "@/infrastructure/repositories/user.repositor
 import { AwsLogDatasource } from "@/infrastructure/datasources/aws-log.datasource.impl";
 import { LogRepositoryImpl } from "@/infrastructure/repositories/log.repository.impl";
 
-export class authRouter {
+export class AuthRouter {
   private router = Router();
 
   public get routes(): Router {
@@ -30,6 +30,12 @@ export class authRouter {
     );
 
     this.router.get("/logout", authController.logoutUser);
+
+    this.router.get(
+      "/refresh-token",
+      requestValidator.validateRefreshToken,
+      authController.refreshToken,
+    );
 
     return this.router;
   }
