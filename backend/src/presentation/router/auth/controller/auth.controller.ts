@@ -5,8 +5,7 @@ import { LogEntity, LogLevel, logType } from "@/domain/entities/Log.entity";
 import { UserEntity } from "@/domain/entities/User.entity";
 import { LogRepository } from "@/domain/repositories/Log.repository";
 import { UserRepository } from "@/domain/repositories/User.repository";
-import { RequestWithUserData } from "@/presentation/middlewares/request-validator.middleware";
-import { NextFunction, Response } from "express";
+import { NextFunction, Response, Request } from "express";
 
 export class AuthController {
   constructor(
@@ -18,12 +17,11 @@ export class AuthController {
   }
 
   async registerUser(
-    req: RequestWithUserData,
+    req: Request,
     res: Response,
     next: NextFunction,
   ): Promise<void> {
-    const { userData } = req;
-    const { name, email, username, password } = userData!;
+    const { name, email, username, password } = req.body;
     const passwordHashed = await Password.hash(password!);
 
     const user = new UserEntity({
@@ -65,7 +63,7 @@ export class AuthController {
         new LogEntity(
           logType.AUTH,
           LogLevel.LOW,
-          `User created successfully: ${JSON.stringify(userData)}`,
+          `User created successfully: ${JSON.stringify(userCreated)}`,
         ),
       );
       res.status(201).json({ message: "User created successfully" });
@@ -83,9 +81,8 @@ export class AuthController {
     }
   }
 
-  async loginUser(req: RequestWithUserData, res: Response, next: NextFunction) {
-    const { userData } = req;
-    const { username, password } = userData!;
+  async loginUser(req: Request, res: Response, next: NextFunction) {
+    const { username, password } = req.body;
 
     try {
       const user = await this.userRepository.getUserByUsername(username);
@@ -132,11 +129,7 @@ export class AuthController {
     }
   }
 
-  async logoutUser(
-    req: RequestWithUserData,
-    res: Response,
-    next: NextFunction,
-  ) {
+  async logoutUser(req: Request, res: Response, next: NextFunction) {
     const refreshToken = req.cookies["refreshToken"];
     if (!refreshToken) {
       res.status(401);
@@ -147,11 +140,24 @@ export class AuthController {
       const { user } = tokenJwt.validateToken(refreshToken);
       res.clearCookie("refreshToken");
       res.status(200).json({ message: "Logout successful" });
+      await this.logRepository?.saveLog(
+        new LogEntity(logType.AUTH, LogLevel.LOW, `user ${user} logout`),
+      );
     } catch (error) {
       await this.logRepository?.saveLog(
-        new LogEntity(logType.AUTH, LogLevel.LOW, `Fail user logout: ${error}`),
+        new LogEntity(
+          logType.AUTH,
+          LogLevel.HIGH,
+          `Fail user logout: ${error}`,
+        ),
       );
       next(error);
     }
+  }
+
+  async refreshToken(req: Request, res: Response, next: NextFunction) {
+    const user = res.locals.userData; // received from middleware
+    const token = tokenJwt.createToken(user);
+    res.json({ token }).status(200);
   }
 }
