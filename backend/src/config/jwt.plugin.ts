@@ -18,7 +18,7 @@ export class tokenJwt {
   };
 
   static validateToken = (token: string) => {
-    const secret = envs.JWT_REFRESH_TOKEN_SECRET || "secret";
+    const secret = envs.JWT_TOKEN_SECRET || "secret";
     try {
       const { data } = jwt.verify(token, secret) as JwtPayload;
 
