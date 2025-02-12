@@ -19,4 +19,6 @@ export const envs = {
     .required()
     .asString(),
   CORS_ORIGIN: env.get("CORS_ORIGIN").required().asString(),
+  JWT_TOKEN_SECRET: env.get("JWT_TOKEN_SECRET").required().asString(),
+  JWT_TOKEN_EXPIRATION: env.get("JWT_TOKEN_EXPIRATION").required().asString(),
 };
