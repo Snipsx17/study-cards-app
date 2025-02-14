@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 import {
   LoginSchema,
   RegistrationSchema,
@@ -8,6 +10,7 @@ import { axiosClient } from "./axios.client";
 import { toast } from "@/hooks/use-toast";
 
 class ApiService {
+  private readonly PROTECTED_ROUTES = ["card/", "group/"];
   constructor(private readonly service: AxiosInstance) {
     this.service.interceptors.response.use(
       (response) => response,
@@ -24,6 +27,28 @@ class ApiService {
         return Promise.reject({ message: error.message });
       },
     );
+
+    // request and set jwt token
+    this.service.interceptors.request.use(
+      async (config) => {
+        if (
+          config.url &&
+          this.PROTECTED_ROUTES.some((route) => {
+            return config.url?.startsWith(route);
+          })
+        ) {
+          const response = await this.service.get("/auth/refresh-token");
+
+          if (response.data.token) {
+            config.headers.Authorization = `Bearer ${response.data.token}`;
+          }
+        }
+        return config;
+      },
+      (error) => {
+        return Promise.reject(error);
+      },
+    );
   }
 
   async registerUser(user: z.infer<typeof RegistrationSchema>) {
@@ -35,19 +60,31 @@ class ApiService {
   }
 
   async loginUser(user: z.infer<typeof LoginSchema>) {
-    return await this.service.post("auth/login", user, {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    try {
+      return await this.service.post("auth/login", user, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+    } catch (error) {}
   }
 
   async logoutUser() {
-    return await this.service.get("auth/logout");
+    try {
+      return await this.service.get("auth/logout");
+    } catch (error) {}
   }
 
   async createGroup(groupName: string) {
-    console.log({ groupName });
+    return await this.service.post(
+      "group/new",
+      { groupName },
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      },
+    );
   }
 }
 
