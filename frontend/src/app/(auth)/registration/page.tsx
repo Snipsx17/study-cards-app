@@ -39,7 +39,7 @@ export default function RegistrationPage() {
       const response = await apiService.registerUser(values);
       toast({
         title: "Registration Successful",
-        description: `${response}`,
+        description: `${response.data?.message}`,
         variant: "default",
         duration: 3000,
       });
