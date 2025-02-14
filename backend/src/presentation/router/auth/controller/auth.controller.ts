@@ -14,6 +14,7 @@ export class AuthController {
   ) {
     this.registerUser = this.registerUser.bind(this);
     this.loginUser = this.loginUser.bind(this);
+    this.logoutUser = this.logoutUser.bind(this);
   }
 
   async registerUser(
@@ -125,6 +126,7 @@ export class AuthController {
       await this.logRepository?.saveLog(
         new LogEntity(logType.AUTH, LogLevel.HIGH, `Fail login: ${error}`),
       );
+
       next(error);
     }
   }
@@ -137,7 +139,7 @@ export class AuthController {
     }
 
     try {
-      const { user } = tokenJwt.validateToken(refreshToken);
+      const { user } = tokenJwt.validateRefreshToken(refreshToken);
       res.clearCookie("refreshToken");
       res.status(200).json({ message: "Logout successful" });
       await this.logRepository?.saveLog(
