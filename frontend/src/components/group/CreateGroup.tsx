@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+"use client";
+
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -22,6 +25,7 @@ import {
 } from "../ui/form";
 import { useState } from "react";
 import { apiService } from "@/service/api.service";
+import { toast } from "@/hooks/use-toast";
 
 const CreateGroupSchema = z.object({
   groupName: z
@@ -34,6 +38,8 @@ export type CreateFormDataType = z.infer<typeof CreateGroupSchema>;
 
 export function CreateGroup() {
   const [fetching, setFetching] = useState<boolean>(false);
+  const [dialogIsOpen, setDialogIsOpen] = useState<boolean>(false);
+
   const form = useForm<CreateFormDataType>({
     resolver: zodResolver(CreateGroupSchema),
     defaultValues: {
@@ -45,6 +51,12 @@ export function CreateGroup() {
     try {
       setFetching(true);
       await apiService.createGroup(groupName);
+      toast({
+        title: "Group created successfully",
+        variant: "default",
+        duration: 3000,
+      });
+      setDialogIsOpen(false);
       setFetching(false);
       form.reset();
     } catch (error) {
@@ -52,10 +64,12 @@ export function CreateGroup() {
       setFetching(false);
     }
   }
+
   return (
-    <Dialog>
+    <Dialog open={dialogIsOpen} onOpenChange={setDialogIsOpen}>
       <DialogTrigger asChild>
         <Button
+          id="create-group"
           size={"icon"}
           className="bg-purple rounded-full text-white [&_svg]:size-8 md:[&_svg]:size-10 shadow-md p-6 fixed bottom-10 right-6 hover:bg-purple/80"
           title="Create a new group"
