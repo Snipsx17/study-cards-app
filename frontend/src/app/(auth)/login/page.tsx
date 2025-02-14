@@ -37,7 +37,7 @@ export default function LoginPage() {
     try {
       setFetching(true);
       const response = await apiService.loginUser(values);
-      const { message, user } = response.data;
+      const { message, user } = response?.data;
       toast({
         title: "Login Successful",
         description: `${message}`,
