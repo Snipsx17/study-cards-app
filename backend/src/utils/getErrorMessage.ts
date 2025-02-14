@@ -3,6 +3,10 @@ export const getErrorMessage = (err: unknown): string => {
     return err;
   }
 
+  if (err instanceof Error && err.message.includes("prisma")) {
+    return "An error occurred while processing your request.";
+  }
+
   if (err instanceof Error) {
     return err.message;
   }
