@@ -16,6 +16,7 @@ import { UserAvatar } from "./UserAvatar";
 import { useRouter } from "next/navigation";
 import { apiService } from "@/service/api.service";
 import { toast } from "@/hooks/use-toast";
+import { useState } from "react";
 
 const MenuButtons = () => (
   <>
@@ -31,7 +32,11 @@ const MenuButtons = () => (
   </>
 );
 
-const UserLoggedOptions = () => {
+const UserLoggedOptions = ({
+  setSheetIsOpen,
+}: {
+  setSheetIsOpen: (state: boolean) => void;
+}) => {
   const { logout } = useGlobalStore();
   const router = useRouter();
 
@@ -45,6 +50,7 @@ const UserLoggedOptions = () => {
         variant: "default",
         duration: 3000,
       });
+      setSheetIsOpen(false);
       router.push("/");
     } catch (error) {}
   };
@@ -60,9 +66,10 @@ const UserLoggedOptions = () => {
 
 export const MobileMenu = () => {
   const { isLoggedIn, user } = useGlobalStore();
+  const [sheetIsOpen, setSheetIsOpen] = useState<boolean>(false);
   return (
     <nav className={`${!isLoggedIn ? "md:hidden" : ""}`}>
-      <Sheet>
+      <Sheet open={sheetIsOpen} onOpenChange={setSheetIsOpen}>
         <SheetTrigger asChild>
           <Button
             variant="link"
@@ -82,7 +89,11 @@ export const MobileMenu = () => {
             <SheetTitle className="md:text-center">Menu</SheetTitle>
           </SheetHeader>
           <div className="flex flex-col space-y-4 items-center mt-4">
-            {isLoggedIn ? <UserLoggedOptions /> : <MenuButtons />}
+            {isLoggedIn ? (
+              <UserLoggedOptions setSheetIsOpen={setSheetIsOpen} />
+            ) : (
+              <MenuButtons />
+            )}
           </div>
         </SheetContent>
       </Sheet>
