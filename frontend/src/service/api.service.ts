@@ -86,6 +86,10 @@ class ApiService {
       },
     );
   }
+
+  async getAllGroups() {
+    return await this.service.get("group/all");
+  }
 }
 
 export const apiService = new ApiService(axiosClient);
