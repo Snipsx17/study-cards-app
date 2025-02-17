@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Loader2, Plus } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import {
@@ -23,9 +23,10 @@ import {
   FormLabel,
   FormMessage,
 } from "../ui/form";
-import { useState } from "react";
+import { ReactNode, useState } from "react";
 import { apiService } from "@/service/api.service";
 import { toast } from "@/hooks/use-toast";
+import { useGlobalStore } from "@/store/global-store";
 
 const CreateGroupSchema = z.object({
   groupName: z
@@ -36,9 +37,18 @@ const CreateGroupSchema = z.object({
 
 export type CreateFormDataType = z.infer<typeof CreateGroupSchema>;
 
-export function CreateGroup() {
+export function CreateGroup({
+  children,
+  className,
+  variant,
+}: {
+  children: ReactNode;
+  className?: string;
+  variant?: "destructive" | "outline" | "secondary" | "ghost" | "link";
+}) {
   const [fetching, setFetching] = useState<boolean>(false);
   const [dialogIsOpen, setDialogIsOpen] = useState<boolean>(false);
+  const { setGroups } = useGlobalStore();
 
   const form = useForm<CreateFormDataType>({
     resolver: zodResolver(CreateGroupSchema),
@@ -50,7 +60,8 @@ export function CreateGroup() {
   async function onSubmit({ groupName }: CreateFormDataType) {
     try {
       setFetching(true);
-      await apiService.createGroup(groupName);
+      const { data } = await apiService.createGroup(groupName);
+      setGroups(data);
       toast({
         title: "Group created successfully",
         variant: "default",
@@ -70,11 +81,11 @@ export function CreateGroup() {
       <DialogTrigger asChild>
         <Button
           id="create-group"
-          size={"icon"}
-          className="bg-purple rounded-full text-white [&_svg]:size-8 md:[&_svg]:size-10 shadow-md p-6 fixed bottom-10 right-6 hover:bg-purple/80"
+          className={className}
           title="Create a new group"
+          variant={variant}
         >
-          <Plus size={"lg"} />
+          {children}
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
