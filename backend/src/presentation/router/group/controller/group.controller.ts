@@ -1,5 +1,6 @@
 import { tokenJwt } from "@/config/jwt.plugin";
 import { GroupEntity } from "@/domain/entities/Group.entity";
+import { UserEntity } from "@/domain/entities/User.entity";
 import { GroupRepository } from "@/domain/repositories/Group.repository";
 import { LogRepository } from "@/domain/repositories/Log.repository";
 import { NextFunction, Request, Response } from "express";
@@ -10,24 +11,13 @@ export class GroupController {
     private readonly logRepository?: LogRepository,
   ) {
     this.create = this.create.bind(this);
+    this.getAll = this.getAll.bind(this);
   }
 
   async create(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const token = req.headers.authorization?.split(" ")[1];
-      const { groupName } = req.body; // received from middleware
-
-      if (!token) {
-        res.status(401);
-        throw new Error("Not token provided");
-      }
-
-      const tokenIsValid = tokenJwt.validateToken(token);
-      if (!tokenIsValid) {
-        res.status(401);
-        throw new Error("Invalid token");
-      }
-      const { userId } = tokenIsValid;
+      const { groupName } = req.body;
+      const { userId } = res.locals.userData; // received from middleware
 
       const newGroup = await this.groupRepository.create(
         new GroupEntity({
@@ -36,7 +26,21 @@ export class GroupController {
         }),
       );
 
-      res.status(201).json(newGroup);
+      const allGroups = await this.groupRepository.getAll(userId);
+
+      res.status(201).json(allGroups);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async getAll(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const { userId } = res.locals.userData;
+
+      const groups = await this.groupRepository.getAll(userId);
+
+      res.status(200).json(groups);
     } catch (error) {
       next(error);
     }

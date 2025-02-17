@@ -9,8 +9,8 @@ export class GroupRepositoryImpl implements GroupRepository {
   create(group: GroupEntity): Promise<GroupEntity | undefined> {
     return this.groupDatasource.create(group);
   }
-  getAll(user: UserEntity): Promise<GroupEntity[] | undefined> {
-    return this.groupDatasource.getAll(user);
+  getAll(userID: number): Promise<GroupEntity[] | undefined> {
+    return this.groupDatasource.getAll(userID);
   }
   getById(id: number): Promise<GroupEntity | undefined> {
     return this.groupDatasource.getById(id);

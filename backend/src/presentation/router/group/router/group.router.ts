@@ -17,8 +17,16 @@ export class GroupRouter {
     this.router.post(
       "/new",
       requestValidator.validate(GroupSchema),
+      requestValidator.validateToken,
       groupController.create,
     );
+
+    this.router.get(
+      "/all",
+      requestValidator.validateToken,
+      groupController.getAll,
+    );
+
     return this.router;
   }
 }

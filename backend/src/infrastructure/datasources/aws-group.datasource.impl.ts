@@ -20,8 +20,20 @@ export class GroupDatasourceImpl implements GroupDatasource {
       }
     }
   }
-  getAll(user: UserEntity): Promise<GroupEntity[] | undefined> {
-    throw new Error("Method not implemented.");
+  async getAll(userID: number): Promise<GroupEntity[] | undefined> {
+    try {
+      const groups = prisma.group.findMany({
+        where: {
+          ownerId: userID,
+        },
+      });
+
+      return groups;
+    } catch (error) {
+      if (error instanceof Error) {
+        throw new Error(error.message);
+      }
+    }
   }
   getById(id: number): Promise<GroupEntity | undefined> {
     throw new Error("Method not implemented.");
