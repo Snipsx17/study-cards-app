@@ -88,7 +88,7 @@ export function CreateGroup({
           {children}
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-[425px] w-[90%]">
         <DialogHeader>
           <DialogTitle className="text-center">Crete new group</DialogTitle>
         </DialogHeader>
