@@ -17,6 +17,7 @@ import { useRouter } from "next/navigation";
 import { apiService } from "@/service/api.service";
 import { toast } from "@/hooks/use-toast";
 import { useState } from "react";
+import { CreateGroup } from "../group/CreateGroup";
 
 const MenuButtons = () => (
   <>
@@ -57,9 +58,12 @@ const UserLoggedOptions = ({
 
   return (
     <>
-      <Button className="text-lg" onClick={onLogout} variant={"link"}>
+      <Button className="text-lg" onClick={onLogout} variant="link">
         Logout
       </Button>
+      <CreateGroup className="text-lg" variant="link">
+        Create group
+      </CreateGroup>
     </>
   );
 };
@@ -88,7 +92,7 @@ export const MobileMenu = () => {
           <SheetHeader>
             <SheetTitle className="md:text-center">Menu</SheetTitle>
           </SheetHeader>
-          <div className="flex flex-col space-y-4 items-center mt-4">
+          <div className="flex flex-col items-center mt-4 gap-0">
             {isLoggedIn ? (
               <UserLoggedOptions setSheetIsOpen={setSheetIsOpen} />
             ) : (
