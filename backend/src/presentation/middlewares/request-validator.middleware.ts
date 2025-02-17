@@ -54,4 +54,28 @@ export class CreateRequestValidator {
       }
     }
   }
+
+  validateToken(req: Request, res: Response, next: NextFunction) {
+    const token = req.headers.authorization?.split(" ")[1];
+    try {
+      if (!token) {
+        res.status(401);
+        throw new Error("Not token provided");
+      }
+
+      const tokenIsValid = tokenJwt.validateToken(token);
+      if (!tokenIsValid) {
+        res.status(401);
+        throw new Error("Invalid token");
+      }
+
+      res.locals.userData = tokenIsValid;
+      next();
+    } catch (error) {
+      res.status(401);
+      if (error instanceof Error) {
+        next(error);
+      }
+    }
+  }
 }
