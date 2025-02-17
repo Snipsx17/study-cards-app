@@ -8,10 +8,16 @@ interface userI {
   avatar: string;
 }
 
-interface cardI {
+export interface cardI {
   question: string;
   response: string;
   group: string;
+}
+
+export interface GroupI {
+  id: number;
+  name: string;
+  ownerId: number;
 }
 
 interface GlobalStoreI {
@@ -19,11 +25,11 @@ interface GlobalStoreI {
   isLoggedIn: boolean;
   user: null | userI;
   cards: cardI[];
-  groups: string[];
+  groups: GroupI[];
   login: (user: userI) => void;
   logout: () => void;
   setCards: (cards: cardI[]) => void;
-  setGroups: (groups: string[]) => void;
+  setGroups: (groups: GroupI[]) => void;
 }
 
 export const useGlobalStore = create<GlobalStoreI>((set) => ({
