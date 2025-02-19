@@ -15,6 +15,7 @@ export class AuthController {
     this.registerUser = this.registerUser.bind(this);
     this.loginUser = this.loginUser.bind(this);
     this.logoutUser = this.logoutUser.bind(this);
+    this.refreshToken = this.refreshToken.bind(this);
   }
 
   async registerUser(
@@ -158,8 +159,21 @@ export class AuthController {
   }
 
   async refreshToken(req: Request, res: Response, next: NextFunction) {
-    const user = res.locals.userData; // received from middleware
-    const token = tokenJwt.createToken(user);
-    res.json({ token }).status(200);
+    const userFromToken = res.locals.userData; // received from middleware
+    try {
+      const userExist = await this.userRepository.getUserByUsername(
+        userFromToken.user,
+      );
+
+      if (!userExist) {
+        res.status(401);
+        throw new Error("Invalid credentials");
+      }
+
+      const token = tokenJwt.createToken(userFromToken);
+      res.json({ token }).status(200);
+    } catch (error) {
+      console.log(error);
+    }
   }
 }
