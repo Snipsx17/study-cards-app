@@ -27,6 +27,12 @@ export class GroupRouter {
       groupController.getAll,
     );
 
+    this.router.delete(
+      "/delete/:id",
+      requestValidator.validateToken,
+      groupController.delete,
+    );
+
     return this.router;
   }
 }
