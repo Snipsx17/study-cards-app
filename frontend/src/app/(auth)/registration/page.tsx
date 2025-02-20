@@ -21,6 +21,8 @@ import { useCreateForm } from "@/lib/createForm";
 import { toast } from "@/hooks/use-toast";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { checkResponseErrors } from "@/lib/checkResponseErrors";
+import { showMessage } from "@/lib/showMessage";
 
 export default function RegistrationPage() {
   const [fetching, setFetching] = useState<boolean>(false);
@@ -47,6 +49,22 @@ export default function RegistrationPage() {
 
       router.push("/login");
     } catch (error) {
+      const errorMessage = checkResponseErrors(error);
+
+      if (errorMessage === "Invalid credentials") {
+        showMessage({
+          title: "Invalid credentials ❌",
+          duration: 3000,
+        });
+        return;
+      }
+
+      showMessage({
+        title: errorMessage,
+        variant: "destructive",
+        duration: 3000,
+      });
+    } finally {
       setFetching(false);
     }
   }

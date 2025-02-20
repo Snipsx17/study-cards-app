@@ -14,6 +14,9 @@ import {
 } from "@/components/ui/navigation-menu";
 import Link from "next/link";
 import { Plus } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { showMessage } from "@/lib/showMessage";
+import { checkResponseErrors } from "@/lib/checkResponseErrors";
 
 const NotLoggedOptions = () => {
   return (
@@ -55,14 +58,36 @@ const NotLoggedOptions = () => {
 
 export default function Home() {
   const { isLoggedIn, setGroups, groups } = useGlobalStore();
+  const router = useRouter();
 
   useEffect(() => {
     const getAllGroups = async () => {
-      const { data } = await apiService.getAllGroups();
-      setGroups(data);
+      try {
+        const { data } = await apiService.getAllGroups();
+        setGroups(data);
+      } catch (error) {
+        const errorMessage = checkResponseErrors(error);
+
+        if (errorMessage === "session expired") {
+          showMessage({
+            title: "Session expired 🔐",
+            description: "Your session has expired, please log in again.",
+            duration: 3000,
+          });
+
+          router.push("/login");
+          return;
+        }
+
+        showMessage({
+          title: errorMessage,
+          variant: "destructive",
+          duration: 3000,
+        });
+      }
     };
     if (isLoggedIn) getAllGroups();
-  }, [setGroups, isLoggedIn]);
+  }, [setGroups, isLoggedIn, router]);
 
   return (
     <MainLayout>

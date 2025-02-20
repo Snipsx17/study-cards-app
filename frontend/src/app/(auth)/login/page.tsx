@@ -22,6 +22,8 @@ import { toast } from "@/hooks/use-toast";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useGlobalStore } from "@/store/global-store";
+import { showMessage } from "@/lib/showMessage";
+import { checkResponseErrors } from "@/lib/checkResponseErrors";
 
 export default function LoginPage() {
   const [fetching, setFetching] = useState<boolean>(false);
@@ -38,11 +40,10 @@ export default function LoginPage() {
       setFetching(true);
       const response = await apiService.loginUser(values);
       const { message, user } = response?.data;
-      toast({
-        title: "Login Successful",
-        description: `${message}`,
-        variant: "default",
-        duration: 3000,
+
+      showMessage({
+        title: `Welcome back ${user.name} 👋`,
+        description: message,
       });
 
       const session = {
@@ -55,6 +56,22 @@ export default function LoginPage() {
       login(user);
       router.push("/");
     } catch (error) {
+      const errorMessage = checkResponseErrors(error);
+
+      if (errorMessage === "Invalid credentials") {
+        showMessage({
+          title: "Invalid credentials ❌",
+          duration: 3000,
+        });
+        return;
+      }
+
+      showMessage({
+        title: errorMessage,
+        variant: "destructive",
+        duration: 3000,
+      });
+    } finally {
       setFetching(false);
     }
   }
