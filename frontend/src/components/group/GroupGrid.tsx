@@ -19,7 +19,7 @@ export const GroupGrid = ({ groups }: { groups: GroupI[] }) => {
       {groups.length > 0 ? (
         <div className="grid md:grid-cols-3 gap-3">
           {groups.map((group) => (
-            <GroupCard key={group.id} name={group.name} />
+            <GroupCard key={group.id} name={group.name} id={group.id} />
           ))}
         </div>
       ) : (
