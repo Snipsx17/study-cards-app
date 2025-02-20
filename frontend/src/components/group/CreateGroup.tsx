@@ -25,8 +25,16 @@ import {
 } from "../ui/form";
 import { ReactNode, useState } from "react";
 import { apiService } from "@/service/api.service";
-import { toast } from "@/hooks/use-toast";
 import { useGlobalStore } from "@/store/global-store";
+import { checkResponseErrors } from "@/lib/checkResponseErrors";
+import { showMessage } from "@/lib/showMessage";
+
+interface CreateGroupI {
+  children: ReactNode;
+  className?: string;
+  variant?: "destructive" | "outline" | "secondary" | "ghost" | "link";
+  afterCreateGroupHandler?: () => void;
+}
 
 const CreateGroupSchema = z.object({
   groupName: z
@@ -41,11 +49,8 @@ export function CreateGroup({
   children,
   className,
   variant,
-}: {
-  children: ReactNode;
-  className?: string;
-  variant?: "destructive" | "outline" | "secondary" | "ghost" | "link";
-}) {
+  afterCreateGroupHandler,
+}: CreateGroupI) {
   const [fetching, setFetching] = useState<boolean>(false);
   const [dialogIsOpen, setDialogIsOpen] = useState<boolean>(false);
   const { setGroups } = useGlobalStore();
@@ -62,7 +67,7 @@ export function CreateGroup({
       setFetching(true);
       const { data } = await apiService.createGroup(groupName);
       setGroups(data);
-      toast({
+      showMessage({
         title: "Group created successfully",
         variant: "default",
         duration: 3000,
@@ -71,8 +76,24 @@ export function CreateGroup({
       setFetching(false);
       form.reset();
     } catch (error) {
+      const errorMessage = checkResponseErrors(error);
+      if (errorMessage === "session expired") {
+        showMessage({
+          title: "Session expired 🔐",
+          description: "Your session has expired, please log in again.",
+          duration: 3000,
+        });
+        return;
+      }
+
+      showMessage({
+        title: errorMessage,
+        variant: "destructive",
+        duration: 3000,
+      });
     } finally {
       setFetching(false);
+      if (afterCreateGroupHandler) afterCreateGroupHandler();
     }
   }
 
@@ -90,7 +111,7 @@ export function CreateGroup({
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px] w-[90%]">
         <DialogHeader>
-          <DialogTitle className="text-center">Crete new group</DialogTitle>
+          <DialogTitle className="text-center">Create new group</DialogTitle>
         </DialogHeader>
         <div className="grid gap-4 py-4">
           <Form {...form}>
@@ -112,11 +133,11 @@ export function CreateGroup({
               <DialogFooter>
                 <Button
                   type="submit"
-                  className="w-full bg-purple hover:bg-purple/80"
+                  className="w-full bg-purple hover:bg-purple/80 font-bold"
                   disabled={fetching}
                 >
                   {fetching && <Loader2 className="animate-spin" />}
-                  Submit
+                  Create
                 </Button>
               </DialogFooter>
             </form>
