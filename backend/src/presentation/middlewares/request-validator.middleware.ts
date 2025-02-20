@@ -46,6 +46,12 @@ export class CreateRequestValidator {
 
     try {
       const tokenData = tokenJwt.validateRefreshToken(refreshToken);
+
+      if (!tokenData) {
+        res.status(401);
+        throw new Error("Invalid refresh token");
+      }
+
       res.locals.userData = tokenData;
       next();
     } catch (error) {
