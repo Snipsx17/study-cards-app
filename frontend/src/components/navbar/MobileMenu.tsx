@@ -61,7 +61,11 @@ const UserLoggedOptions = ({
       <Button className="text-lg" onClick={onLogout} variant="link">
         Logout
       </Button>
-      <CreateGroup className="text-lg" variant="link">
+      <CreateGroup
+        afterCreateGroupHandler={() => setSheetIsOpen(false)}
+        className="text-lg"
+        variant="link"
+      >
         Create group
       </CreateGroup>
     </>
