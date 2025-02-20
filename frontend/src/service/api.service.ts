@@ -7,7 +7,6 @@ import {
 import { AxiosInstance } from "axios";
 import { z } from "zod";
 import { axiosClient } from "./axios.client";
-import { toast } from "@/hooks/use-toast";
 
 class ApiService {
   private readonly PROTECTED_ROUTES = ["card/", "group/"];
@@ -15,16 +14,7 @@ class ApiService {
     this.service.interceptors.response.use(
       (response) => response,
       (error) => {
-        const message =
-          error.response?.data?.message || "An unexpected error occurred.";
-
-        toast({
-          title: "Error",
-          description: message,
-          variant: "destructive",
-        });
-
-        return Promise.reject({ message: error.message });
+        return Promise.reject(error);
       },
     );
 
@@ -60,19 +50,15 @@ class ApiService {
   }
 
   async loginUser(user: z.infer<typeof LoginSchema>) {
-    try {
-      return await this.service.post("auth/login", user, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-    } catch (error) {}
+    return await this.service.post("auth/login", user, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
   }
 
   async logoutUser() {
-    try {
-      return await this.service.get("auth/logout");
-    } catch (error) {}
+    return await this.service.get("auth/logout");
   }
 
   async createGroup(groupName: string) {
@@ -89,6 +75,10 @@ class ApiService {
 
   async getAllGroups() {
     return await this.service.get("group/all");
+  }
+
+  async deleteGroup(groupId: number) {
+    return await this.service.delete(`group/delete/${groupId}`);
   }
 }
 
