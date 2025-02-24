@@ -18,7 +18,6 @@ import { ChevronLeft, Loader2 } from "lucide-react";
 import { LoginSchema } from "@/domain/schemas/registration.schema";
 import { apiService } from "@/service/api.service";
 import { useCreateForm } from "@/lib/createForm";
-import { toast } from "@/hooks/use-toast";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useGlobalStore } from "@/store/global-store";
@@ -125,8 +124,11 @@ export default function LoginPage() {
           </div>
 
           <Button type="submit" className="w-full" disabled={!!fetching}>
-            {fetching && <Loader2 className="animate-spin" />}
-            Login
+            {fetching ? (
+              <Loader2 className="animate-spin w-5 h-5 mx-auto" />
+            ) : (
+              "Login"
+            )}
           </Button>
         </form>
       </Form>

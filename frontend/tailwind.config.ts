@@ -73,7 +73,9 @@ export default {
     animation: {
       "slide-in": "slide-in 0.3s ease-out",
       "slide-out": "slide-out 0.3s ease-out",
+      spin: "spin 1s linear infinite",
     },
   },
+
   plugins: [tailwindAnimate],
 } satisfies Config;
