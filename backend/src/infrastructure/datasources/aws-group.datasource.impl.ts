@@ -55,8 +55,24 @@ export class GroupDatasourceImpl implements GroupDatasource {
       }
     }
   }
-  update(group: GroupEntity): Promise<GroupEntity | undefined> {
-    throw new Error("Method not implemented.");
+  async update(group: GroupEntity): Promise<GroupEntity | undefined> {
+    try {
+      const groupUpdated = await prisma.group.update({
+        where: {
+          id: group.id,
+        },
+        data: {
+          name: group.name,
+        },
+      });
+
+      console.log(groupUpdated);
+      return new GroupEntity({
+        id: groupUpdated.id,
+        name: groupUpdated.name,
+        ownerId: groupUpdated.ownerId,
+      });
+    } catch (error) {}
   }
   async delete(id: number): Promise<boolean> {
     try {

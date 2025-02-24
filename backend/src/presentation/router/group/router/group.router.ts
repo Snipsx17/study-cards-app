@@ -33,6 +33,13 @@ export class GroupRouter {
       groupController.delete,
     );
 
+    this.router.put(
+      "/update/:id",
+      requestValidator.validate(GroupSchema),
+      requestValidator.validateToken,
+      groupController.update,
+    );
+
     return this.router;
   }
 }
