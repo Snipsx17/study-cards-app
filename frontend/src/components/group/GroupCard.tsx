@@ -4,6 +4,7 @@ import { Card, CardFooter, CardHeader, CardTitle } from "../ui/card";
 import { useGlobalStore } from "@/store/global-store";
 import { DeleteButton } from "../DeleteButton";
 import { useRouter } from "next/navigation";
+import { EditGroup } from "./EditGroup";
 
 export const GroupCard = ({ name, id }: { name: string; id: number }) => {
   const { setGroups } = useGlobalStore();
@@ -30,21 +31,30 @@ export const GroupCard = ({ name, id }: { name: string; id: number }) => {
           {name}
         </CardTitle>
       </CardHeader>
-      <CardFooter className="flex flex-col md:flex-row  gap-3">
-        <Button
-          className="bg-purple w-full  md:flex-1 hover:bg-purple/80"
-          size={"lg"}
-        >
-          Open
-        </Button>
+      <CardFooter className="flex flex-col gap-3">
+        <div className="w-full">
+          <Button className="bg-purple w-full hover:bg-purple/80" size={"lg"}>
+            Open
+          </Button>
+        </div>
+        <div className="flex gap-3 w-full">
+          <EditGroup
+            groupId={id}
+            groupName={name}
+            className="bg-purple flex-1 hover:bg-purple/80"
+          >
+            Edit
+          </EditGroup>
 
-        <DeleteButton
-          onDelete={onDelete}
-          title="Are you absolutely sure?"
-          description="This action cannot be undone. This will permanently delete the group and cards in there."
-        >
-          Delete
-        </DeleteButton>
+          <DeleteButton
+            onDelete={onDelete}
+            title="Are you absolutely sure?"
+            description="This action cannot be undone. This will permanently delete the group and cards in there."
+            className="flex-1"
+          >
+            Delete
+          </DeleteButton>
+        </div>
       </CardFooter>
     </Card>
   );

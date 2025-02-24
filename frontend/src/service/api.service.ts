@@ -80,6 +80,18 @@ class ApiService {
   async deleteGroup(groupId: number) {
     return await this.service.delete(`group/delete/${groupId}`);
   }
+
+  async updateGroup(groupId: number, groupName: string) {
+    return await this.service.put(
+      `group/update/${groupId}`,
+      { groupName },
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      },
+    );
+  }
 }
 
 export const apiService = new ApiService(axiosClient);

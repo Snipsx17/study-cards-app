@@ -17,6 +17,7 @@ interface DeleteButtonProps {
   title: string;
   description: string;
   children?: React.ReactNode;
+  className?: string;
 }
 
 export const DeleteButton: FC<DeleteButtonProps> = ({
@@ -24,11 +25,12 @@ export const DeleteButton: FC<DeleteButtonProps> = ({
   title,
   description,
   children,
+  className,
 }) => {
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button variant="destructive" className="w-full md:flex-1" size={"lg"}>
+        <Button variant="destructive" className={className} size={"lg"}>
           {children}
         </Button>
       </AlertDialogTrigger>

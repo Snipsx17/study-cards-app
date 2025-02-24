@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import { Button } from "@/components/ui/button";
@@ -28,14 +29,16 @@ import { useGlobalStore } from "@/store/global-store";
 import { checkResponseErrors } from "@/lib/checkResponseErrors";
 import { showMessage } from "@/lib/showMessage";
 
-interface CreateGroupI {
+interface UpdateGroupI {
   children: ReactNode;
   className?: string;
   variant?: "destructive" | "outline" | "secondary" | "ghost" | "link";
-  afterCreateGroupHandler?: () => void;
+  groupName: string;
+  groupId: number;
 }
 
 const CreateGroupSchema = z.object({
+  groupId: z.number(),
   groupName: z
     .string()
     .min(2, "Group name must have at least 2 characters")
@@ -44,12 +47,13 @@ const CreateGroupSchema = z.object({
 
 export type CreateFormDataType = z.infer<typeof CreateGroupSchema>;
 
-export function CreateGroup({
+export function EditGroup({
   children,
   className,
   variant,
-  afterCreateGroupHandler,
-}: CreateGroupI) {
+  groupName,
+  groupId,
+}: UpdateGroupI) {
   const [fetching, setFetching] = useState<boolean>(false);
   const [dialogIsOpen, setDialogIsOpen] = useState<boolean>(false);
   const { setGroups } = useGlobalStore();
@@ -57,17 +61,18 @@ export function CreateGroup({
   const form = useForm<CreateFormDataType>({
     resolver: zodResolver(CreateGroupSchema),
     defaultValues: {
-      groupName: "",
+      groupId,
+      groupName,
     },
   });
 
-  async function onSubmit({ groupName }: CreateFormDataType) {
+  async function onSubmit({ groupId, groupName }: CreateFormDataType) {
     try {
       setFetching(true);
-      const { data } = await apiService.createGroup(groupName);
+      const { data } = await apiService.updateGroup(groupId, groupName);
       setGroups(data);
       showMessage({
-        title: "Group created successfully",
+        title: "Group updated successfully",
         variant: "default",
         duration: 3000,
       });
@@ -92,7 +97,6 @@ export function CreateGroup({
       });
     } finally {
       setFetching(false);
-      if (afterCreateGroupHandler) afterCreateGroupHandler();
     }
   }
 
@@ -100,17 +104,17 @@ export function CreateGroup({
     <Dialog open={dialogIsOpen} onOpenChange={setDialogIsOpen}>
       <DialogTrigger asChild>
         <Button
-          id="create-group"
           className={className}
-          title="Create a new group"
+          title="Update group"
           variant={variant}
+          size={"lg"}
         >
           {children}
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px] w-[90%]">
         <DialogHeader>
-          <DialogTitle className="text-center">Create new group</DialogTitle>
+          <DialogTitle className="text-center">Update group name</DialogTitle>
         </DialogHeader>
         <div className="grid gap-4 py-4">
           <Form {...form}>
@@ -120,7 +124,7 @@ export function CreateGroup({
                 name="groupName"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Create group</FormLabel>
+                    <FormLabel>Group name</FormLabel>
                     <FormControl>
                       <Input placeholder="Enter group name" {...field} />
                     </FormControl>
@@ -136,7 +140,7 @@ export function CreateGroup({
                   disabled={fetching}
                 >
                   {fetching && <Loader2 className="animate-spin" />}
-                  Create
+                  Update
                 </Button>
               </DialogFooter>
             </form>
