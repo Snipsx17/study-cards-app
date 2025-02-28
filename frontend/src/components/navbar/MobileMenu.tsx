@@ -58,9 +58,6 @@ const UserLoggedOptions = ({
 
   return (
     <>
-      <Button className="text-lg" onClick={onLogout} variant="link">
-        Logout
-      </Button>
       <CreateGroup
         afterCreateGroupHandler={() => setSheetIsOpen(false)}
         className="text-lg"
@@ -68,6 +65,10 @@ const UserLoggedOptions = ({
       >
         Create group
       </CreateGroup>
+
+      <Button className="text-lg" onClick={onLogout} variant="link">
+        Logout
+      </Button>
     </>
   );
 };
