@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import { z } from "zod";
@@ -19,10 +18,11 @@ import { RegistrationSchema } from "@/domain/schemas/registration.schema";
 import { apiService } from "@/service/api.service";
 import { useCreateForm } from "@/lib/createForm";
 import { toast } from "@/hooks/use-toast";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { checkResponseErrors } from "@/lib/checkResponseErrors";
 import { showMessage } from "@/lib/showMessage";
+import { useGlobalStore } from "@/store/global-store";
 
 export default function RegistrationPage() {
   const [fetching, setFetching] = useState<boolean>(false);
@@ -33,6 +33,7 @@ export default function RegistrationPage() {
     password: "",
     confirmPassword: "",
   });
+  const { isLoggedIn } = useGlobalStore();
   const router = useRouter();
 
   async function onSubmit(values: z.infer<typeof RegistrationSchema>) {
@@ -68,6 +69,10 @@ export default function RegistrationPage() {
       setFetching(false);
     }
   }
+
+  useEffect(() => {
+    if (isLoggedIn) router.push("/");
+  }, [isLoggedIn, router]);
 
   return (
     <>

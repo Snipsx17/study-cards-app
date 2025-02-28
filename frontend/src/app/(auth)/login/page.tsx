@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import { z } from "zod";
@@ -18,7 +17,7 @@ import { ChevronLeft, Loader2 } from "lucide-react";
 import { LoginSchema } from "@/domain/schemas/registration.schema";
 import { apiService } from "@/service/api.service";
 import { useCreateForm } from "@/lib/createForm";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useGlobalStore } from "@/store/global-store";
 import { showMessage } from "@/lib/showMessage";
@@ -32,7 +31,7 @@ export default function LoginPage() {
   });
 
   const router = useRouter();
-  const { login } = useGlobalStore();
+  const { login, isLoggedIn } = useGlobalStore();
 
   async function onSubmit(values: z.infer<typeof LoginSchema>) {
     try {
@@ -74,6 +73,10 @@ export default function LoginPage() {
       setFetching(false);
     }
   }
+
+  useEffect(() => {
+    if (isLoggedIn) router.push("/");
+  }, [isLoggedIn, router]);
 
   return (
     <>
